@@ -28,9 +28,10 @@ using TickZoom.Api;
 namespace TickZoom.Common
 {
 	/// <summary>
-	/// The Hull Moving Average (HMA), developed by Alan Hull, is an extremely 
-	/// fast and smooth moving average. In fact, the HMA almost eliminates lag 
-	/// altogether and manages to improve smoothing at the same time.
+	/// The Hull Moving Average (HMA). Introduced by Alan Hull, is an extremely 
+	/// fast and smooth moving average. HMA significantly decreases lag 
+	/// and improve smoothing at the same time. The price we 
+	/// pay for this performance is serious overshot.
 	/// FB 20091230: Created
 	/// </summary>
 	public class HMA : IndicatorCommon
@@ -41,7 +42,7 @@ namespace TickZoom.Common
 		int period = 14;
 		double halfPeriod;
 		double sqrtPeriod;
-		IndicatorCommon temp;
+
 		
 		public HMA(object anyPrice, int period) {
 			AnyInput = anyPrice;
@@ -55,19 +56,17 @@ namespace TickZoom.Common
 			Drawing.PaneType = PaneType.Primary;
 			Drawing.IsVisible = true;
 			
-			temp = Formula.Indicator();
-			halfPeriod = (Math.Ceiling(Convert.ToDouble(period/2)) - (Convert.ToDouble(period/2)) <= 0.5) ? Math.Ceiling(Convert.ToDouble(period/2)) : Math.Floor(Convert.ToDouble(period/2));
-			sqrtPeriod = (Math.Ceiling(Math.Sqrt(Convert.ToDouble(period))) - Math.Sqrt(Convert.ToDouble(period)) <= 0.5) ? Math.Ceiling(Math.Sqrt(Convert.ToDouble(period))) : Math.Floor(Math.Sqrt(Convert.ToDouble(period)));
+			halfPeriod = (Math.Ceiling(Convert.ToDouble(Period*0.5)) - (Convert.ToDouble(Period*0.5)) <= 0.5) ? Math.Ceiling(Convert.ToDouble(Period*0.5)) : Math.Floor(Convert.ToDouble(Period*0.5));
+			sqrtPeriod = (Math.Ceiling(Math.Sqrt(Convert.ToDouble(Period))) - Math.Sqrt(Convert.ToDouble(Period)) <= 0.5) ? Math.Ceiling(Math.Sqrt(Convert.ToDouble(Period))) : Math.Floor(Math.Sqrt(Convert.ToDouble(Period)));
 			W1 = Formula.WMA(Input, Convert.ToInt32(halfPeriod));
-			W2 = Formula.WMA(Input, period);
+			W2 = Formula.WMA(Input, Period);
+			W3 = Formula.WMA(2D * W1[0] - W2[0], Convert.ToInt32(sqrtPeriod));
 		}
 				
 		public override void Update() {
-			if (Count < period + 1 ) {
+			if (Count == 1 ) {
 				this[0] = Input[0];
 			} else {
-				temp[0] = 2 * W1[0] - W2[0];
-				W3 = Formula.WMA(temp, Convert.ToInt32(sqrtPeriod));
 				this[0] = W3[0];
 			}
 		}

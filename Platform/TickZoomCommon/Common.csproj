@@ -89,6 +89,7 @@
     <Compile Include="Indicators\PercentR_New.cs" />
     <Compile Include="Indicators\RSI.cs" />
     <Compile Include="Indicators\HMA.cs" />
+    <Compile Include="Indicators\T3Average.cs" />
     <Compile Include="Indicators\Wilder.cs" />
     <Compile Include="Indicators\InverseFisherTransform.cs" />
     <Compile Include="Indicators\LinearRegression.cs" />

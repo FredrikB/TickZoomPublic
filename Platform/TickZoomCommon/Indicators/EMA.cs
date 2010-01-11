@@ -39,20 +39,20 @@ namespace TickZoom.Common
 			AnyInput = anyPrice;
 			StartValue = 0;
 			this.period = period;
+			Drawing.IsVisible = true;
 		}
 		
 		public override void OnInitialize()	{
 			Name = "EMA";
 			Drawing.Color = Color.Green;
 			Drawing.PaneType = PaneType.Primary;
-			Drawing.IsVisible = true;
 			Drawing.GroupName = "EMA";
 			Drawing.GraphType = GraphType.Line;
 		}
 
 		public override void Update() {
-			if(Count < period + 1) this[0] = Input[0];
-			else this[0] = Input[0] * (2 / (period + 1)) + this[1] * (1 - (2 / (period + 1)));
+			if(Count == 1) this[0] = Input[0];
+			else this[0] = Input[0] * (2D / (period + 1D)) + this[1] * (1D - (2D / (period + 1D)));
 		}
 		
 		public int Period {

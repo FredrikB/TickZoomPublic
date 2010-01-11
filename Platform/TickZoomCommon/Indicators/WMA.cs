@@ -28,7 +28,7 @@ using TickZoom.Api;
 namespace TickZoom.Common
 {
 	/// <summary>
-	/// The Weighted Moving Average indicator weights the more recent value greater
+	/// Weighted Moving Average (WMA). The Weighted Moving Average weights the more recent value greater
 	/// that prior value. For 5 bar WMA the current bar is multiplied by 5, the previous
 	/// one by 4, and so on, down to 1 for the final value. WMA divides the result by the
 	/// total of the multipliers for the average.
@@ -55,10 +55,9 @@ namespace TickZoom.Common
 		public override void Update() {
 			double sum = 0;
 			int count = 0;
-			if( Count < period + 1) this[0] = Input[0];
+			if( Count == 1) this[0] = Input[0];
 			else {
 				for( int i = 0; i< period; i++) {
-					int mult = period - i;
 					sum += Input[i] * (period - i);
 					count += period - i;
 				}
